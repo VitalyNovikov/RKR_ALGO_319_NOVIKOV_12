@@ -1,50 +1,38 @@
-#include <iostream>   
-#include <string>     
-#include <algorithm>  // Для reverse()
-
-using namespace std; 
+#include <iostream>
+#include <string>
+#include <sstream>   // Для stringstream
+#include <algorithm> // Для reverse()
+using namespace std;
 
 // Функція для переведення десяткового числа в 9-річну систему з алфавітом (0,1,2,3,4,5,6,7,F)
 string DecTo_N_(int D) {
-    // Обробка випадку, коли вхідне число дорівнює 0
-    if (D == 0) {
-        return "0";  // Будь-яка система числення: 0 залишається 0
-    }
+    if (D == 0) return "0";
 
-    string result;  // Тут зберігатимемо результат
-
-    // Головний цикл перетворення:
+    string result;
     while (D > 0) {
-        int remainder = D % 9;  // Знаходимо остачу від ділення на 9
-
-        // Обробка особливого випадку: якщо остача 8, замінюємо її на 'F'
-        if (remainder == 8) {
-            result += 'F';
-        } 
-        // Інакше додаємо цифру як символ
-        else {
-            result += to_string(remainder);  // Конвертуємо цифру в рядок
-        }
-
-        D /= 9;  // Ділимо число на 9 для наступної ітерації
+        int remainder = D % 9;
+        if (remainder == 8)
+            result += "F";
+        else
+            result += to_string(remainder);
+        D /= 9;
     }
 
-    // Реверсуємо рядок, тому що цифри отримувались у зворотньому порядку
     reverse(result.begin(), result.end());
-
-    return result;  // Повертаємо готовий результат
+    return result;
 }
 
 int main() {
-    int number;  // Змінна для зберігання вхідного числа
+    string line;
+    cout << "Введіть десяткові числа через пробіл: ";
+    getline(cin, line); // Зчитуємо весь рядок
 
-    // Запитуємо користувача ввести число
-    cout << "Введіть десяткове число: ";
-    cin >> number;
+    stringstream ss(line);
+    int number;
+    while (ss >> number) {
+        string converted = DecTo_N_(number);
+        cout << number << " -> " << converted << endl;
+    }
 
-    // Конвертуємо число та виводимо результат
-    string converted = DecTo_N_(number);
-    cout << "Результат у 9-річній системі: " << converted << endl;
-
-    return 0;  // Кінець програми
+    return 0;
 }
